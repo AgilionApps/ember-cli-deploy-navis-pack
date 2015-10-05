@@ -1,25 +1,73 @@
-# Ember-cli-deploy-navis-pack
+# ember-cli-deploy-navis-pack
 
-This README outlines the details of collaborating on this Ember addon.
+An ember-cli-deploy plugin pack for deploying to Navis.io.
 
-## Installation
+Installs everything you need to get started deploying.
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+### Setup
 
-## Running
+From the root of your ember application's repository:
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+```shell
+ember install ember-cli-deploy@beta
+ember install git+ssh://github.com/AgilionApps/ember-cli-deploy-navis-pack.git
+```
 
-## Running Tests
+This installs the following plugins:
 
-* `ember test`
-* `ember test --server`
+* ember-deploy-navis
+* ember-cli-deploy-build
+* ember-cli-deploy-revision-data
+* ember-cli-deploy-display-revisions
 
-## Building
+### Deploy Config
 
-* `ember build`
+To deploy you will need two pieces of information from Navis:
 
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+1. Your Navis.io `appKey`. This is available on the view application screen.
+   The `appKey` is unique per application, per environment.
+2. Your Navis.io deploy credentials, the `userKey` and `userSecret`. These
+   are available on your profile page. Your user credentials are used for all 
+   Navis apps.
+
+You will typically want to export your user credentials as environmental vars.
+
+In `~/.zshrc` or `~/.bashrc` (or similar):
+
+```shell
+### Navis creds
+export NAVIS_USER_KEY="<your-navis-deploy-key>"
+export NAVIS_USER_SECRET="<your-navis-deploy-secret>"
+```
+
+Now edit the `config/deploy.js` that was generated during install to add your 
+`appKey`.
+
+#### Navis Asset Hosting
+
+By default ember-deploy-navis will upload your assets to the navis asset host.
+You can disable this behaviour by setting `uploadAssets` to `false`.
+
+To take advantage of the assets you must prepend your navis asset host 
+path onto asset URLs. Add the following to `ember-cli-build.js` or 
+`Brocfile.js`: 
+
+```javascript
+var app = new EmberApp({
+  fingerprint: {
+    prepend: '//cdn.navis.io/<your app_key>/'
+  }
+});
+```
+
+You are now ready to deploy!
+
+### Usage
+
+Available commands:
+
+* `ember deploy:list` to see the list of existing builds
+* `ember deploy` to deploy your application for development
+* `ember deploy --environment production` to deploy your application for production
+* `ember deploy:activate --revision <VERSION>` to activate a specific revision
+
