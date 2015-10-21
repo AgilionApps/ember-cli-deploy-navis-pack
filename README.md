@@ -17,7 +17,7 @@ This installs the following plugins:
 
 * ember-deploy-navis
 * ember-cli-deploy-build
-* ember-cli-deploy-revision-data
+* ember-cli-deploy-git-info
 * ember-cli-deploy-display-revisions
 
 ### Deploy Config
